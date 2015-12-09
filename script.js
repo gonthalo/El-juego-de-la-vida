@@ -3,7 +3,7 @@ var pluma = lienzo.getContext("2d");
 var matrix = [];
 var matsim = [];
 var color = [5, 255, 100];
-var a = 30;
+var a = 60;
 var b = 30;
 
 function prod(lis, k){
@@ -60,12 +60,10 @@ function px(p, q){
 
 function square(p, q, d, c){
 	pluma.fillStyle = c;
-	for (var ii=0; ii<=2*d; ii++){
-		px(p + d, q - d + ii);
-		px(p - d, q - d + ii);
-		px(p - d + ii, q + d);
-		px(p - d + ii, q - d);
-	}
+	pluma.fillRect(p - d, q - d, 1, 2*d);
+	pluma.fillRect(p - d, q + d, 2*d, 1);
+	pluma.fillRect(p - d + 1, q - d, 2*d, 1);
+	pluma.fillRect(p + d, q - d + 1, 1, 2*d);
 }
 
 function block(p, q, d, c){
