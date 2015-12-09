@@ -3,6 +3,7 @@ var pluma = lienzo.getContext("2d");
 var matrix = [];
 var matsim = [];
 var color = [5, 255, 100];
+var pausa = false;
 var a = 60;
 var b = 30;
 
@@ -138,14 +139,46 @@ function move(){
 }
 
 function play(){
-	copy();
-	move();
-	draw();
+	if (!pausa){
+		copy();
+		move();
+		draw();
+	}
+}
+
+function parar(){
+	pausa = !pausa;
 }
 
 rese();
 randomize();
 draw();
 copy();
+
+lienzo.addEventListener("click", function (e){
+	var x;
+	var y;
+	if (e.pageX || e.pageY) {
+		x = e.pageX;
+		y = e.pageY;
+	} else {
+		x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+		y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+	}
+	x -= lienzo.offsetLeft;
+	y -= lienzo.offsetTop;
+	console.log(x, y);
+	x = parseInt(x/20.0);
+	y = parseInt(y/20.0);
+	console.log(x, y);
+	val = matrix[x][y];
+	matrix[x][y] = !val;
+	if (val){
+		pluma.fillStyle="black";
+		pluma.fillRect(20*x, 20*y, 20, 20);
+	} else {
+		block(10 + 20*x, 10 + 20*y, 10, color);
+	}
+}, false);
 
 window.setInterval(play, 100);
