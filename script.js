@@ -8,6 +8,7 @@ var figura = 1;
 var method = 1;
 var a = 60;
 var b = 30;
+var dens = 10;
 
 function prod(lis, k){
 	for (var ii=0; ii<3; ii++){
@@ -34,7 +35,7 @@ function rese(){
 		matsim[a+1][jj]=false;
 	}
 	pluma.fillStyle = "black";
-	pluma.fillRect(0, 0, 20*a, 20*b);
+	pluma.fillRect(0, 0, 2*dens*a, 2*dens*b);
 }
 
 function randomize(){
@@ -79,14 +80,31 @@ function block(p, q, d, c){
 	pluma.fillRect(p - d + 4, q - d + 4, 2*d - 7, 2*d - 7);
 }
 
-function draw(){
+function fulldraw(){
 	for (var ii=0; ii<a; ii++){
 		for (var jj=0; jj<b; jj++){
 			if (matrix[ii][jj]){
-				block(10 + 20*ii, 10 + 20*jj, 10, color);
-			} else {
+				block(dens + dens*2*ii, dens + 2*dens*jj, dens, color);
+			}
+			if (!matrix[ii][jj]){
 				pluma.fillStyle = "black";
-				pluma.fillRect(20*ii, 20*jj, 20, 20);
+				pluma.fillRect(2*dens*ii, 2*dens*jj, 2*dens, 2*dens);
+			}
+		}
+	}
+}
+
+function draw(){
+	/*pluma.fillStyle = "black";
+	pluma.fillRect(0, 0, a*2*dens, b*2*dens);*/
+	for (var ii=0; ii<a; ii++){
+		for (var jj=0; jj<b; jj++){
+			if (matrix[ii][jj] && !matsim[ii + 1][jj + 1]){
+				block(dens + dens*2*ii, dens + 2*dens*jj, dens, color);
+			}
+			if (!matrix[ii][jj] && matsim[ii + 1][jj + 1]){
+				pluma.fillStyle = "black";
+				pluma.fillRect(2*dens*ii, 2*dens*jj, 2*dens, 2*dens);
 			}
 		}
 	}
@@ -174,6 +192,13 @@ function move(){
 			}
 		}
 	}
+	if (method==3){
+		for (var ii=0; ii<a; ii++){
+			for (var jj=0; jj<b; jj++){
+				matrix[ii][jj] = highlife(matsim[ii+1][jj+1], cumsum(ii, jj));
+			}
+		}
+	}
 }
 
 function play(){
@@ -195,11 +220,12 @@ function parar(){
 function resetear(){
 	rese();
 	randomize();
+	fulldraw();
 }
 
 function turnon(x, y){
 	matrix[x][y] = true;
-	block(10 + 20*x, 10 + 20*y, 10, color);
+	block(dens + 2*dens*x, dens + 2*dens*y, dens, color);
 }
 
 function swap(x, y){
@@ -207,9 +233,9 @@ function swap(x, y){
 	matrix[x][y] = !val;
 	if (val){
 		pluma.fillStyle="black";
-		pluma.fillRect(20*x, 20*y, 20, 20);
+		pluma.fillRect(2*dens*x, 2*dens*y, 2*dens, 2*dens);
 	} else {
-		block(10 + 20*x, 10 + 20*y, 10, color);
+		block(dens + 2*dens*x, dens + 2*dens*y, dens, color);
 	}
 }
 
@@ -226,8 +252,8 @@ lienzo.addEventListener("click", function (e){
 	x -= lienzo.offsetLeft;
 	y -= lienzo.offsetTop;
 	console.log(x, y);
-	x = parseInt(x/20.0);
-	y = parseInt(y/20.0);
+	x = parseInt(x/2.0/dens);
+	y = parseInt(y/2.0/dens);
 	console.log(x, y);
 	if (figura == 1){
 		swap(x, y);
