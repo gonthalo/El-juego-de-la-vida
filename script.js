@@ -4,6 +4,8 @@ var matrix = [];
 var matsim = [];
 var color = [5, 255, 100];
 var pausa = false;
+var figura = 1;
+var method = 1;
 var a = 60;
 var b = 30;
 
@@ -31,6 +33,8 @@ function rese(){
 		matsim[a][jj]=false;
 		matsim[a+1][jj]=false;
 	}
+	pluma.fillStyle = "black";
+	pluma.fillRect(0, 0, 20*a, 20*b);
 }
 
 function randomize(){
@@ -130,30 +134,84 @@ function conway(life, num){
 	return false;
 }
 
+function dyn(life, num){
+	if (life){
+		if (num==3 || num==4 || num==6 || num==7 || num==8){
+			return true;
+		}
+	} else {
+		if (num==3 || num==6 || num==7 || num==8){
+			return true;
+		}
+	}
+}
+
+function highlife(life, num){
+	if (life){
+		if (num==2 || num==3){
+			return true;
+		}
+	} else {
+		if (num==3 || num==6){
+			return true;
+		}
+	}
+	return false;
+}
+
 function move(){
-	for (var ii=0; ii<a; ii++){
-		for (var jj=0; jj<b; jj++){
-			matrix[ii][jj] = conway(matsim[ii+1][jj+1], cumsum(ii, jj));
+	if (method==1){
+		for (var ii=0; ii<a; ii++){
+			for (var jj=0; jj<b; jj++){
+				matrix[ii][jj] = conway(matsim[ii+1][jj+1], cumsum(ii, jj));
+			}
+		}
+	}
+	if (method==2){
+		for (var ii=0; ii<a; ii++){
+			for (var jj=0; jj<b; jj++){
+				matrix[ii][jj] = dyn(matsim[ii+1][jj+1], cumsum(ii, jj));
+			}
 		}
 	}
 }
 
 function play(){
 	if (!pausa){
-		copy();
-		move();
-		draw();
+		mover();
 	}
+}
+
+function mover(){
+	copy();
+	move();
+	draw();
 }
 
 function parar(){
 	pausa = !pausa;
 }
 
-rese();
-randomize();
-draw();
-copy();
+function resetear(){
+	rese();
+	randomize();
+}
+
+function turnon(x, y){
+	matrix[x][y] = true;
+	block(10 + 20*x, 10 + 20*y, 10, color);
+}
+
+function swap(x, y){
+	var val = matrix[x][y];
+	matrix[x][y] = !val;
+	if (val){
+		pluma.fillStyle="black";
+		pluma.fillRect(20*x, 20*y, 20, 20);
+	} else {
+		block(10 + 20*x, 10 + 20*y, 10, color);
+	}
+}
 
 lienzo.addEventListener("click", function (e){
 	var x;
@@ -171,14 +229,31 @@ lienzo.addEventListener("click", function (e){
 	x = parseInt(x/20.0);
 	y = parseInt(y/20.0);
 	console.log(x, y);
-	val = matrix[x][y];
-	matrix[x][y] = !val;
-	if (val){
-		pluma.fillStyle="black";
-		pluma.fillRect(20*x, 20*y, 20, 20);
-	} else {
-		block(10 + 20*x, 10 + 20*y, 10, color);
+	if (figura == 1){
+		swap(x, y);
+	}
+	if (figura == 2){
+		turnon(x, y);
+		turnon((x + 1)%a, (y + 1)%b);
+		turnon((x + 1)%a, (y + 2)%b);
+		turnon(x, (y + 2)%b);
+		turnon((x + 2)%a, (y + 1)%b);
+	}
+	if (figura==3){
+		for (var ii=0; ii<a; ii++){
+			swap(ii, y);
+		}
+	}
+	if (figura==4){
+		for (var jj=0; jj<a; jj++){
+			swap(x, jj);
+		}
 	}
 }, false);
+
+rese();
+randomize();
+draw();
+copy();
 
 window.setInterval(play, 100);
