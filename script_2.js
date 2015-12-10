@@ -7,7 +7,7 @@ var pausa = false;
 var figura = 1;
 var method = 1;
 var a = 50;
-var b = 50;
+var b = 35;
 var dens = 6;
 
 function prod(lis, k){
