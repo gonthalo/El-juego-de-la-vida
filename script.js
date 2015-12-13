@@ -271,7 +271,7 @@ lienzo.addEventListener("click", function (e){
 		}
 	}
 	if (figura==4){
-		for (var jj=0; jj<a; jj++){
+		for (var jj=0; jj<b; jj++){
 			swap(x, jj);
 		}
 	}
