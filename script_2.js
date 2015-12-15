@@ -6,9 +6,9 @@ var color = [5, 255, 100];
 var pausa = false;
 var figura = 1;
 var method = 1;
-var a = 60;
-var b = 30;
-var dens = 10;
+var a = 50;
+var b = 35;
+var dens = 6;
 
 function prod(lis, k){
 	for (var ii=0; ii<3; ii++){
@@ -271,7 +271,7 @@ lienzo.addEventListener("click", function (e){
 		}
 	}
 	if (figura==4){
-		for (var jj=0; jj<b; jj++){
+		for (var jj=0; jj<a; jj++){
 			swap(x, jj);
 		}
 	}
