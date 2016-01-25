@@ -6,7 +6,7 @@ var color = [5, 255, 100];
 var pausa = false;
 var figura = 1;
 var method = 1;
-var a = 50;
+var a = 55;
 var b = 35;
 var dens = 6;
 
